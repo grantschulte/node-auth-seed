@@ -1,7 +1,8 @@
 const express = require("express");
-const utils = require("./utils/utils");
-const port = process.env.PORT || 5000;
-const app = express();
+const utils   = require("./utils/utils");
+const config  = require("./config");
+const port    = process.env.PORT || config.DEFAULT_PORT;
+const app     = express();
 
 app.get("/", (req, res) => {
   res.json({ message: "Hello world" });
