@@ -2,10 +2,11 @@
   "name": "express-server-seed",
   "version": "1.0.0",
   "description": "Simple node express server seed",
-  "main": "index.js",
+  "main": "src/index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "nodemon index.js"
+    "lint": "jshint src/**/*.js",
+    "start": "nodemon src/index.js"
   },
   "repository": {
     "type": "git",
@@ -15,7 +16,9 @@
   "license": "ISC",
   "homepage": "https://bitbucket.org/gjschulte/express-server-seed.js#readme",
   "dependencies": {
+    "dotenv": "^4.0.0",
     "express": "^4.15.2",
+    "mongoose": "^4.9.4",
     "nodemon": "^1.11.0"
   }
 }
