@@ -1,27 +1,13 @@
-let router = require("express").Router();
+const router = require("express").Router();
+const User   = require("../models/user");
+const usersHandler = require("../route-handlers/usersHandler");
 
 router.route("/")
-  .get((req, res) => {
-    res.send("GET users");
-  })
-
-  .post((req, res) => {
-    res.send("CREATE user");
-  })
-;
+  .get(usersHandler.get);
 
 router.route("/:userId")
-  .get((req, res) => {
-    res.send(`GET user with id ${req.params.userId}`);
-  })
-
-  .put((req, res) => {
-    res.send(`UPDATE user with id ${req.params.userId}`);
-  })
-
-  .delete((req, res) => {
-    res.send(`DELETE user with id ${req.params.userId}`);
-  })
-;
+  .get(usersHandler.getOne)
+  .put(usersHandler.updateOne)
+  .delete(usersHandler.deleteOne);
 
 module.exports = router;
