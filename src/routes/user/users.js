@@ -1,6 +1,6 @@
 const router = require("express").Router();
-const User   = require("../models/user");
-const usersHandler = require("../route-handlers/usersHandler");
+const User   = require("../../models/user");
+const usersHandler = require("../../route-handlers/users-handler");
 
 router.route("/")
   .get(usersHandler.get);

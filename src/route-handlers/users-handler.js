@@ -47,4 +47,4 @@ module.exports = {
   deleteOne(req, res) {
     res.send(`DELETE user with id ${req.params.userId}`);
   }
-}
+};
