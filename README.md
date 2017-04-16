@@ -1,3 +1,3 @@
-# Express Server Seed
+# Node Auth Seed
 
-A simple node server for sandboxing
+A simple node server that uses passport and JSON web tokens to authenticate users.
