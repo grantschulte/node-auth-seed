@@ -6,8 +6,5 @@ if (process.env.NODE_ENV === "development") {
 }
 
 module.exports = {
-  secret: process.env.SECRET,
-  tokenExpirationTime: 60 * 20,
-  audience: origin,
-  issuer: "gjschulte"
+  origin: origin
 };

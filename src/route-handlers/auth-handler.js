@@ -1,5 +1,5 @@
 const jwt       = require("jwt-simple");
-const jwtConfig = require("../config/jwt-config").jwtConfig;
+const jwtConfig = require("../config/jwt-config");
 const User      = require("../models/user");
 
 module.exports = {

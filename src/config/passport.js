@@ -2,7 +2,7 @@
 
 const JwtStrategy = require("passport-jwt").Strategy;
 const ExtractJwt  = require("passport-jwt").ExtractJwt;
-const jwtConfig   = require("../config/jwt-config").jwtConfig;
+const jwtConfig   = require("../config/jwt-config");
 const User        = require("../models/user");
 
 module.exports = (passport) => {
@@ -20,9 +20,9 @@ module.exports = (passport) => {
       }
 
       if (user) {
-        done(null, user);
+        return done(null, user);
       } else {
-        done(null, false, "User token not found or is not matching.");
+        return done(new Error("User not found."), false);
       }
     });
   }));
