@@ -1,48 +1,53 @@
 const express         = require("express");
-const cors            = require("cors");
 const bodyParser      = require("body-parser");
 const morgan          = require("morgan");
-const passport        = require("passport");
+const jwt             = require("jsonwebtoken");
+const expressJwt      = require("express-jwt");
 const config          = require("dotenv").config();
 const utils           = require("./utils/utils");
 const db              = require("./db");
-const passportConfig  = require("./config/passport");
-const corsOptions     = require("./config/cors");
 const port            = process.env.DEFAULT_PORT || process.env.PORT;
 const app             = express();
 
-let routesPublic = require("./routes/index");
+let routesPublic = require("./routes/public");
 let routesApi    = require("./routes/api");
-let routesUser   = require("./routes/user");
 
-app.options('*', cors());   // Allow PUT/DELETE
-app.use(cors(corsOptions)); // Allow cors requests for all routes
+app.engine("html", require("ejs").renderFile);
+app.set("view engine", "html");
+
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin",       "*");
+  res.header("Access-Control-Request-Headers",    "*");
+  res.header("Access-Control-Allow-Methods",      "GET, POST, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers",      "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+  res.header("Access-Control-Allow-Credentials",  "true");
+  next();
+});
+
+app.set("view engine", "html");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 app.use(morgan("dev"));
-app.use(passport.initialize());
-passportConfig(passport);
 
 /**
 * Routes
 */
-
+app.use(utils.verifyToken);
 app.use("/", routesPublic);
 app.use("/api", (req, res, next) => {
-  passport.authenticate("jwt", { session: false }, (error, user) => {
-    if (error) {
-      res.status(403).json({ message: error });
-    }
+  if (!req.user) {
+    return res.status(401).json({
+      message: "Permission Denied!"
+    });
+  }
 
-    if (user) {
-      return next();
-    }
-
-    res.status(403).json({ message: "Token could not be authenticated" });
-  })(req, res, next);
-});
+  next();
+})
 app.use("/api", routesApi);
-app.use("/user", routesUser);
+
+/**
+* Start Server
+*/
 
 app.listen(port, () => {
   utils.bootLog(port, app.get("env"));
@@ -61,24 +66,20 @@ app.use((req, res, next) => {
 });
 
 
-// Development error handler prints stacktrace
-
-if (app.get("env") === "development") {
-  app.use((error, req, res, next) => {
-    res.status(error.status || 500);
-    res.render("error", {
-      message: error.message,
-      error  : error
-    });
-  });
-}
-
-// Production error handler does not send stacktrace
+// Error handler without stack trace
 
 app.use((error, req, res, next) => {
   res.status(error.status || 500);
-  res.render("error", {
-    message: error.message,
-    error  : {}
-  });
+  if (error.status === 500) {
+    console.error(error.stack);
+    res.json({
+      error: "Internal Server Error"
+    });
+  } else if (error.status === 404) {
+    res.render("error"); // Show error page.
+  } else {
+    res.json({
+      error: error.message
+    })
+  }
 });

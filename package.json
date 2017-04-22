@@ -1,10 +1,9 @@
 {
-  "name": "express-server-seed",
+  "name": "node-auth-seed",
   "version": "1.0.0",
   "description": "Simple node express server seed",
   "main": "src/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
     "lint": "jshint src/**/*.js",
     "start": "nodemon src/server.js"
   },
@@ -20,9 +19,13 @@
     "body-parser": "^1.17.1",
     "cors": "^2.8.3",
     "dotenv": "^4.0.0",
+    "ejs": "^2.5.6",
     "express": "^4.15.2",
+    "express-jwt": "^5.3.0",
+    "jsonwebtoken": "^7.3.0",
     "jwt-simple": "^0.5.1",
     "mongoose": "^4.9.4",
+    "mongoose-timestamp": "^0.6.0",
     "morgan": "^1.8.1",
     "nodemon": "^1.11.0",
     "passport": "^0.3.2",

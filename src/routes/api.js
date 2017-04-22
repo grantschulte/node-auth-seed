@@ -1,6 +1,6 @@
-let router = require("express").Router();
-let people = require("./api/people");
+let router  = require("express").Router();
+let profile = require("./api/profile");
 
-router.use("/people", people);
+router.use("/profile", profile);
 
 module.exports = router;
