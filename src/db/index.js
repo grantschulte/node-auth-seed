@@ -4,6 +4,7 @@ const DB_HOST = process.env.DB_HOST;
 const DB_NAME = process.env.DB_NAME;
 const DB_URI  = `mongodb://${DB_HOST}/${DB_NAME}`;
 
+mongoose.Promise = Promise;
 mongoose.connect(DB_URI);
 
 let db = mongoose.connection;

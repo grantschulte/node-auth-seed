@@ -1,10 +1,8 @@
-let router = require("express").Router();
-
-router.get("/", (req, res) => {
+function home(req, res) {
   res.json({
     message: "Home",
     status: 200
   });
-});
+}
 
-module.exports = router;
+module.exports = home;

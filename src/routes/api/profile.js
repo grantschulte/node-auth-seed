@@ -1,9 +1,15 @@
-let router    = require("express").Router();
 let mongoose  = require("mongoose");
 let utils     = require("../../utils/utils");
 let User      = require("../../models/user");
 
-router.get("/", (req, res) => {
+/**
+ * Get a user profile
+ *
+ * METHOD: GET
+ * URL: /api/profile
+ */
+
+function get(req, res) {
   let id = mongoose.Types.ObjectId(req.user._id);
 
   User.findById(id, (error, user) => {
@@ -26,6 +32,20 @@ router.get("/", (req, res) => {
       user
     });
   });
-});
+}
 
-module.exports = router;
+/**
+ * Update a user profile
+ *
+ * METHOD: PUT
+ * URL: /api/profile
+ */
+
+function update(req, res) {
+  console.log("UPDATE USER PROFILE");
+  res.json({
+    message: "Attemps to update profile."
+  });
+}
+
+module.exports = { get, update }

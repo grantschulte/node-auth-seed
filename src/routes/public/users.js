@@ -1,4 +1,3 @@
-const router = require("express").Router();
 const bcrypt = require("bcrypt");
 const User   = require("../../models/user");
 const utils  = require("../../utils/utils");
@@ -7,12 +6,11 @@ const expressJwt = require("express-jwt");
 /**
  * Create a user
  *
- * Method: POST
+ * METHOD: POST
  * URL: /users/signup
- *
  */
 
-router.post("/signup", (req, res) => {
+function signup(req, res) {
   let body = req.body;
 
   if (!body.username || !body.password) {
@@ -49,19 +47,27 @@ router.post("/signup", (req, res) => {
       });
     });
   });
-});
+}
 
 /**
  * Sign a user in
  *
- * Method: POST
+ * METHOD: POST
  * URL: /users/signin
- * Returns: { user, token }
  */
 
-router.post("/signin", (req, res) => {
+function signin(req, res) {
+  let body = req.body;
+
+  if (!body.username || !body.password) {
+    return res.status(403).json({
+      success: false,
+      message: "Please provide a name and password."
+    });
+  }
+
   User.findOne({
-    username: req.body.username
+    username: body.username
   }, (error, user) => {
     if (error) {
       throw error;
@@ -74,7 +80,7 @@ router.post("/signin", (req, res) => {
       });
     }
 
-    bcrypt.compare(req.body.password, user.password, function(err, valid) {
+    bcrypt.compare(body.password, user.password, function(err, valid) {
       if (!valid) {
         return res.status(404).json({
           error: true,
@@ -90,18 +96,16 @@ router.post("/signin", (req, res) => {
       });
     });
   });
-});
-
+}
 
 /**
  * Get all users
  *
- * Method: GET
+ * METHOD: GET
  * URL: /users/all
- *
  */
 
-router.get("/?", (req, res) => {
+function all(req, res) {
   console.log("REQ USER", req.user);
   if (!req.user || !req.user.admin) {
     return res.status(401).json({
@@ -116,6 +120,6 @@ router.get("/?", (req, res) => {
 
     res.json(users);
   });
-});
+}
 
-module.exports = router;
+module.exports = { signup, signin, all };
