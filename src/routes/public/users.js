@@ -22,7 +22,10 @@ function signup(req, res) {
 
   utils.checkUniquenessOfUser(body, (error) => {
     if (error) {
-      throw error;
+      return res.status(403).json({
+        success: false,
+        message: error
+      });
     }
 
     let hash = bcrypt.hashSync(body.password.trim(), 10);

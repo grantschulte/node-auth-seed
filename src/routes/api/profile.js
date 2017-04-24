@@ -43,6 +43,7 @@ function get(req, res) {
 
 function update(req, res) {
   console.log("UPDATE USER PROFILE");
+  
   res.json({
     message: "Attemps to update profile."
   });
