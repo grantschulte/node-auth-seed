@@ -5,60 +5,34 @@ const jwt             = require("jsonwebtoken");
 const expressJwt      = require("express-jwt");
 const config          = require("dotenv").config();
 const utils           = require("./utils/utils");
+const cors            = require("./config/cors");
 const db              = require("./db");
-const port            = process.env.DEFAULT_PORT || process.env.PORT;
 const app             = express();
 
-let routesPublic = require("./routes/public");
-let routesApi    = require("./routes/api");
-
-app.engine("html", require("ejs").renderFile);
-app.set("view engine", "html");
-
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin",       "*");
-  res.header("Access-Control-Request-Headers",    "*");
-  res.header("Access-Control-Allow-Methods",      "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers",      "Origin, X-Requested-With, Content-Type, Accept, Authorization");
-  res.header("Access-Control-Allow-Credentials",  "true");
-  next();
-});
-
-app.set("view engine", "html");
+app.use(cors);
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
+
+/**
+* Logging
+*/
+
 app.use(morgan("dev"));
 
 /**
 * Routes
 */
+
+let routes = require("./routes");
+
 app.use(utils.verifyToken);
-app.use("/", routesPublic);
-app.use("/api", (req, res, next) => {
-  if (!req.user) {
-    return res.status(401).json({
-      message: "Permission Denied!"
-    });
-  }
-
-  next();
-})
-app.use("/api", routesApi);
-
-/**
-* Start Server
-*/
-
-app.listen(port, () => {
-  utils.bootLog(port, app.get("env"));
-});
+app.use("/", routes);
 
 /**
 * Error Handling
 */
 
 // Catch 404 and forward to error handler
-
 app.use((req, res, next) => {
   var error = new Error("Not Found");
   error.status = 404;
@@ -67,7 +41,6 @@ app.use((req, res, next) => {
 
 
 // Error handler without stack trace
-
 app.use((error, req, res, next) => {
   res.status(error.status || 500);
   if (error.status === 500) {
@@ -84,4 +57,5 @@ app.use((error, req, res, next) => {
   }
 });
 
+// Export app for testing
 module.exports = app;

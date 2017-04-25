@@ -31,7 +31,7 @@ db.on("disconnected", () => {
 
 process.on("SIGINT", () => {
   db.close(() => {
-    console.log("-x- Database connection disconnected app termination");
-    process.exit(0);
+    console.log("-x- Database disconnected due to app termination");
+    process.exit(1);
   });
 });

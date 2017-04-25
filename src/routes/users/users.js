@@ -42,7 +42,7 @@ function signup(req, res) {
       }
 
       let token = utils.generateToken(user);
-      user      = utils.getCleanUser(user);
+      user = utils.getCleanUser(user);
 
       res.json({
         user,

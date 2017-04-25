@@ -19,6 +19,7 @@ function checkUniquenessOfUser(reqBody, callback) {
     }]
   }, function(error, user) {
     if (error) {
+      console.log("About to throw.");
       throw error;
     }
 
@@ -27,25 +28,17 @@ function checkUniquenessOfUser(reqBody, callback) {
       return;
     }
 
-    let errors;
-
     if (user.username === username) {
-      errors = {};
-      errors.username =  `${username} is not unique.`;
+      error = `${username} is not unique.`;
     }
 
-    if (user.email === email) {
-      errors = errors ? errors : {};
-      errors.email = `${email} is not unique.`;
-    }
-
-    callback(errors);
+    callback(error);
   });
 }
 
 function getCleanUser(user) {
   if (!user) {
-    return {}
+    return {};
   }
 
   let u = user.toJSON();
