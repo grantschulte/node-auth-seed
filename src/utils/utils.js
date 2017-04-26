@@ -29,7 +29,7 @@ function checkUniquenessOfUser(reqBody, callback) {
     }
 
     if (user.username === username) {
-      error = `${username} is not unique.`;
+      error = `${username} is taken.`;
     }
 
     callback(error);
