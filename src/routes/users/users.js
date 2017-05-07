@@ -1,6 +1,7 @@
 const bcrypt = require("bcrypt");
 const User   = require("../../models/user");
 const utils  = require("../../utils/utils");
+const jwt    = require("jsonwebtoken");
 const expressJwt = require("express-jwt");
 
 /**
@@ -109,7 +110,6 @@ function signin(req, res) {
  */
 
 function all(req, res) {
-  console.log("REQ USER", req.user);
   if (!req.user || !req.user.admin) {
     return res.status(401).json({
       error: "You must be admin to access this route."
@@ -125,4 +125,35 @@ function all(req, res) {
   });
 }
 
-module.exports = { signup, signin, all };
+function meFromToken(req, res, next) {
+  var token = req.body.token
+    || req.query.token
+    || req.headers["x-access-token"];
+
+  if (!token) {
+    return res.status(401).json({
+      message: "Must pass token."
+    });
+  }
+
+  jwt.verify(token, process.env.SECRET, (error, user) => {
+    if (error) {
+      throw error;
+    }
+
+    User.findOne({ "_id": user._id }, (error, user) => {
+      if (error) {
+        throw error;
+      }
+
+      user = utils.getCleanUser(user);
+
+      res.json({
+        user,
+        token
+      });
+    });
+  });
+}
+
+module.exports = { signup, signin, all, meFromToken };
