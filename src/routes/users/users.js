@@ -125,7 +125,14 @@ function all(req, res) {
   });
 }
 
-function meFromToken(req, res, next) {
+/**
+ * Re-authenticate user
+ *
+ * METHOD: POST
+ * URL: /users/me/from/token
+ */
+
+function meFromToken(req, res) {
   var token = req.body.token
     || req.query.token
     || req.headers["x-access-token"];

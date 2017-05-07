@@ -1,3 +1,5 @@
+/* jshint unused: false */
+
 const router = require("express").Router();
 const expressJwt = require("express-jwt");
 const users = require("./users");
